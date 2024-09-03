@@ -5,12 +5,15 @@ import { createContext, useContext, useState, useEffect } from "react";
 const ChatContext = createContext();
 
 const ChatProvider = ({ children }) => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("userInfo"))
+  );
+  const [selectedChat, setSelectedChat] = useState();
+  const [chats, setChats] = useState([]);
   const history = useHistory();
   useEffect(() => {
     try {
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-      console.log("userInfo", userInfo);
       setUser(userInfo);
       if (!userInfo) {
         history?.push("/");
@@ -18,7 +21,9 @@ const ChatProvider = ({ children }) => {
     } catch (err) {}
   }, [history]);
   return (
-    <ChatContext.Provider value={{ user, setUser }}>
+    <ChatContext.Provider
+      value={{ user, setUser, selectedChat, setSelectedChat, chats, setChats }}
+    >
       {children}
     </ChatContext.Provider>
   );
