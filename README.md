@@ -9,12 +9,12 @@ Server: Node JS, Express JS
 Database: Mongo DB
 
 Demo
-https://talk-a-tive.herokuapp.com/
+https://mern-chat-app-qla8.onrender.com/
 
 Run Locally
 Clone the project
 
-git clone https://github.com/piyush-eon/mern-chat-app
+git clone https://github.com/lokesh-ps/mern-chat-app
 Go to the project directory
 
 cd mern-chat-app
