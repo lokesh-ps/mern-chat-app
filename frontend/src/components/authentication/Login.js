@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 
 import React, { useState } from "react";
 import axios from "axios";
+import { ChatState } from "../../Context/ChatProvider";
 
 const Login = () => {
   const [email, setEmail] = useState();
@@ -20,6 +21,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const history = useHistory();
+  const { setUser } = ChatState();
 
   const submitHandler = async () => {
     setLoading(true);
@@ -33,38 +35,43 @@ const Login = () => {
         position: "bottom",
       });
       setLoading(false);
-    }
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-      const data = axios.post("/api/user/login", { email, password }, config);
-      toast({
-        title: "Login Success.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      data.then((res) => {
-        localStorage.setItem("userInfo", JSON.stringify(res.data));
-      });
-      setLoading(false);
-      history.push("/chats");
-    } catch (err) {
-      console.log("err", err);
+    } else {
+      try {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+          },
+        };
+        const { data } = await axios.post(
+          "/api/user/login",
+          { email, password },
+          config
+        );
+        toast({
+          title: "Login Success.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+        console.log("data", data);
+        setUser(data);
+        localStorage.setItem("userInfo", JSON.stringify(data));
+        setLoading(false);
+        history.push("/chats");
+      } catch (err) {
+        console.log("err", err);
 
-      toast({
-        title: "Error occured!",
-        description: err.response.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setLoading(false);
+        toast({
+          title: "Error occured!",
+          description: err.response.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+        setLoading(false);
+      }
     }
   };
 

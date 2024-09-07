@@ -11,6 +11,8 @@ import {
 import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { ChatState } from "../../Context/ChatProvider";
+
 const Signup = () => {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
@@ -21,6 +23,7 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const history = useHistory();
+  const { setUser } = ChatState();
 
   const postDetails = (pics) => {
     setLoading(true);
@@ -92,7 +95,7 @@ const Signup = () => {
           "Content-type": "application/json",
         },
       };
-      const data = axios.post(
+      const { data } = await axios.post(
         "/api/user",
         { name, email, password, pic },
         config
@@ -104,9 +107,9 @@ const Signup = () => {
         isClosable: true,
         position: "bottom",
       });
-      data.then((res) => {
-        localStorage.setItem("userInfo", JSON.stringify(res.data));
-      });
+      setUser(data);
+      localStorage.setItem("userInfo", JSON.stringify(data));
+
       setLoading(false);
       history.push("/chats");
     } catch (err) {
