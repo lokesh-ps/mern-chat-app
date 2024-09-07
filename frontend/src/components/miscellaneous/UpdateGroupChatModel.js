@@ -5,7 +5,6 @@ import {
   Button,
   FormControl,
   IconButton,
-  Image,
   Input,
   Modal,
   ModalBody,
@@ -15,7 +14,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
-  Text,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
